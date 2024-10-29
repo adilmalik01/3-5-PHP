@@ -13,6 +13,13 @@ if (isset($_GET["id"])) {
 
     $sql = "DELETE FROM blogs WHERE id = $id";
     $del_result = mysqli_query($conn, $sql);
+
+    if ($del_result) {
+        header("Location: index.php");
+        exit();
+    } else {
+        echo "Error deleting record: " . mysqli_error($conn);
+    }
 }
 
 
