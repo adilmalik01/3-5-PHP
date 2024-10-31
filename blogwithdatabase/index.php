@@ -88,7 +88,7 @@ $conn->close();
                     <p class="card-text"><small class="text-body-secondary"><?php echo $post["author_name"] ?></small></p>
                     <div class="icon-div">
                         <a href="index.php?id=<?php echo $post["id"] ?>"><i class="bi bi-trash-fill"></i></a>
-                        <a href=""><i class="bi bi-pencil-fill"></i></a>
+                        <a href="update.php?id=<?php echo $post["id"] ?>"><i class="bi bi-pencil-fill"></i></a>
                     </div>
                 </div>
             </div>
