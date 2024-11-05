@@ -20,39 +20,26 @@ if (isset($_GET["id"])) {
     $fetch_data = mysqli_fetch_assoc($update_result);
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = mysqli_real_escape_string($conn, $_POST["id"]);
+    $author_name = mysqli_real_escape_string($conn, $_POST["author_name"]);
+    $title = mysqli_real_escape_string($conn, $_POST["title"]);
+    $content = mysqli_real_escape_string($conn, $_POST["content"]);
 
+    $sql = "UPDATE blogs SET author_name='$author_name', title='$title', content='$content' WHERE id = $id";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    if (mysqli_query($conn, $sql)) {
+        header("Location: index.php");
+        exit();
+    } else {
+        echo "Error updating record: " . mysqli_error($conn);
+    }
+}
 
 
 $conn->close();
+
 ?>
-
-
-
 
 
 
@@ -81,25 +68,23 @@ $conn->close();
 
     <div class="container mt-5 p-5">
         <form action="update.php" method="POST">
-
+            <input type="hidden" name="id" value="<?php echo $id; ?>">
             <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Author Name</label>
-                <input type="text" value="<?php echo $fetch_data["author_name"]; ?> " class="form-control" name="author_name" id="exampleFormControlInput1" placeholder="Enter your Name">
+                <label class="form-label">Author Name</label>
+                <input type="text" value="<?php echo $fetch_data["author_name"]; ?>" class="form-control" name="author_name" placeholder="Enter your Name">
             </div>
             <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Title</label>
-                <input type="text" value="<?php echo $fetch_data["title"]; ?> " class="form-control" name="title" id="exampleFormControlInput1" placeholder="Enter your blog title">
+                <label class="form-label">Title</label>
+                <input type="text" value="<?php echo $fetch_data["title"]; ?>" class="form-control" name="title" placeholder="Enter your blog title">
             </div>
             <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Content</label>
-                <input class="form-control" value="<?php echo $fetch_data["content"]; ?> " name="content" id="exampleFormControlTextarea1" placeholder="Enter your Blog Content" rows="3"></>
+                <label class="form-label">Content</label>
+                <textarea class="form-control" name="content" placeholder="Enter your Blog Content" rows="3"><?php echo $fetch_data["content"]; ?></textarea>
             </div>
-
             <div class="col-auto">
                 <button class="btn btn-primary" type="submit">Update Blog</button>
             </div>
         </form>
-
     </div>
 
 </body>
