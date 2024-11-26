@@ -23,7 +23,6 @@ if (isset($_SESSION["user_login"]) == true) {
 
 <body>
 
-    <h1>Welcome to Dashboard.............!</h1>
     <ul>
        <li><a href="./dashboard.php">Home</a></li>
        <li><a href="./profile.php">Profile</a></li>

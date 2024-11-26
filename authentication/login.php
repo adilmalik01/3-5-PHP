@@ -1,5 +1,13 @@
 <?php
 
+session_start();
+
+
+if (isset($_SESSION["user_login"]) || isset($_SESSION["user_login"]) == true) {
+    header("Location: dashboard.php");
+}
+
+
 include("db.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -20,9 +28,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $user = $result->fetch_assoc();
         if (password_verify($password, $user["password"])) {
+
+            $_SESSION["user_login"] = true;
+            $_SESSION["username"] = $user["username"];
+
             
             header("Location: dashboard.php");
-
         } else {
             echo  '
             <div class="alert alert-danger" role="alert">
@@ -42,7 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     $conn->close();
-
 }
 
 

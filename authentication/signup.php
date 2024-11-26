@@ -8,25 +8,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
 
 
-    $sql = "INSERT INTO   users(username,email,password) VALUES ('$username','$email','$password')";
 
+    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $result = mysqli_query($conn, $sql);
 
-    if ($conn->query($sql) === TRUE) {
-
-        echo  '
-        <div class="alert alert-success" role="alert">
-         User Signup
-        </div>
-        ';
-
-        header("Location: login.php");
-    } else {
-
+    if (mysqli_num_rows($result) > 0) {
         echo  '
         <div class="alert alert-danger" role="alert">
-         Invalid User
+         Email Already Exist
         </div>
         ';
+    } else {
+        $sql = "INSERT INTO   users(username,email,password) VALUES ('$username','$email','$password')";
+        if ($conn->query($sql) === TRUE) {
+
+            echo  '
+            <div class="alert alert-success" role="alert">
+             User Signup
+            </div>
+            ';
+
+            header("Location: login.php");
+        } else {
+
+            echo  '
+            <div class="alert alert-danger" role="alert">
+             Invalid User
+            </div>
+            ';
+        }
     }
 }
 
