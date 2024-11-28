@@ -1,12 +1,19 @@
 <?php
 
-include  'db.php';
+
+session_start();
+
+if (isset($_SESSION["user_login"]) != true) {
+    header("Location: login.php");
+}
+
+
+
+include 'db.php';
 
 
 $sql = "SELECT * FROM blogs";
 $result = mysqli_query($conn, $sql);
-
-
 
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
@@ -25,70 +32,110 @@ if (isset($_GET["id"])) {
 $conn->close();
 ?>
 
-
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forms || PHP</title>
+    <title>All Blogs || PHP</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         .main {
+            width: 100%;
+            min-height: 100vh;
             display: flex;
             flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .card-text {
+            font-size: 1rem;
+            color: #555;
         }
 
         .icon-div {
             display: flex;
-            justify-content: end;
-            gap: 20px;
-            align-items: center;
-            flex-direction: row-reverse;
-            font-size: 20px;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .icon-div a {
+            color: #dc3545;
+            font-size: 1.25rem;
+            transition: color 0.3s ease;
+        }
+
+        .icon-div :nth-child(2) {
+            color: green;
+            font-size: 1.25rem;
+            transition: color 0.3s ease;
+        }
+
+        .icon-div a:hover {
+            color: #155724;
+        }
+
+        @media (max-width: 767px) {
+            .card {
+                max-width: 100%;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .card-text {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 
 <body>
 
+    <?php include 'navbar.php'; ?>
 
-    <?php include 'navbar.php' ?>
+    <div class="container mt-4">
+        <h1 class="mb-4 text-center">All Blogs</h1>
 
-
-
-    <h1 class="mt-4 ms-5">All Blogs</h1>
-
-
-    <div class="container main">
-
-
-        <?php foreach ($result as $post): ?>
-
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title"> <?php echo $post["title"] ?></h5>
-                    <p class="card-text"><?php echo $post["content"] ?></p>
-                    <p class="card-text"><small class="text-body-secondary"><?php echo $post["author_name"] ?></small></p>
-                    <div class="icon-div">
-                        <a href="index.php?id=<?php echo $post["id"] ?>"><i class="bi bi-trash-fill"></i></a>
-                        <a href="update.php?id=<?php echo $post["id"] ?>"><i class="bi bi-pencil-fill"></i></a>
+        <div class="row main">
+            <?php foreach ($result as $post): ?>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo $post["title"] ?></h5>
+                            <p class="card-text"><?php echo $post["content"] ?></p>
+                            <p class="card-text"><small class="text-muted"><?php echo $post["author_name"] ?></small></p>
+                            <div class="icon-div">
+                                <a href="index.php?id=<?php echo $post["Id"] ?>"><i class="bi bi-trash-fill"></i></a>
+                                <a href="update.php?id=<?php echo $post["Id"] ?>"><i class="bi bi-pencil-fill"></i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-        <?php endforeach ?>
-
+            <?php endforeach; ?>
+        </div>
     </div>
 
 </body>
